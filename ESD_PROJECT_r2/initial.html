@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="./JavaScript/jquery-3.3.1.js"></script>
+
+</head>
+
+<body class="bg-dark">
+    <br>
+    <br>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg  navbar-dark bg-dark navbar-light bg-light">
+            <a class="navbar-brand" href="#">ESP LOCK</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html" id="home">Home</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="initial.html" id="init">Initial setup </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="unlock.html" id="unlock">Unlock</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="update.html" id="update">Update password</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reset.html" id="reset">Reset System</a>
+                    </li>
+
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="jumbotron text-center container">
+            <div id="initd">
+                <div class="card-deck mb-3 text-center">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal"> LOCK 1</h4>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group row">
+                                    <label for="exampleInputEmail1">Setup password</label>
+                                    <input type="email" class="form-control" id="setupPassword" aria-describedby="emailHelp" placeholder="Enter setup password">
+                                    <small id="emailHelp" class="form-text text-muted">this password is resent in the
+                                        code section</small>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="exampleInputPassword1">New Password</label>
+                                    <input type="password" class="form-control" id="currentPassword" placeholder=" new Password">
+                                    <small id="emailHelp" class="form-text text-muted">don't share this password</small>
+                                </div>
+                                <button id="initbttn" type="submit" class="btn btn-primary">Setup</button>
+                            </form>
+                        </div>
+
+                    </div>
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">Setup Stage</h4>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title pricing-card-title"> <small>Sets the </small> User defined password <small>to the </small>ESP8266-12e</h4>
+                            <ul class="list-styled mt-3 mb-4 text-left">
+                                <li>This can be only done once during the setup process.</li>
+                                <li>The device password is coded into the code itself, so the password is retained after a reset. </li>
+                                <li>This is not the case for the User define password which can be updated and also reseted</li>
+                                <li>The device password cannot be used to unlock the device</li>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+</body>
+<script>
+    $(document).ready(function() {
+        $('#initbttn').on('click',function () {  
+            var data = {
+                setupPassword : $('#setupPassword').val(),
+                currentPassword : $('#currentPassword').val(),
+            }
+            $.ajax({
+                type:'POST',
+                url:'http://192.168.1.5/intial',
+                data: JSON.stringify(data),
+                statusCode:{
+                    200:function () {
+                        console.log("Sucess");
+                    },
+                    400:function(){
+                        console.log("incorrect password");
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+</html>
