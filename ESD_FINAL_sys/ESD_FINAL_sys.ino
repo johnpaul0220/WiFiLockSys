@@ -175,12 +175,22 @@ void update_Options(){
 }
 
 void reset_(){
-    server.sendHeader("Access-Control-Allow-Origin","*");
-  for (int i = 0; i < 512; i++) {
-    EEPROM.write(i, 0);
-  }
+  server.sendHeader("Access-Control-Allow-Origin","*");
+  String pasword = readString(80);
+  StaticJsonBuffer <500> jsonbuffer;
+  JsonObject Jobject = jsonbuffer.parseObject(server.args("plain"));
+  String recivedPassword = Jobject["currentPassword "];
+  if(password == recivedPassword){
+    Serial.println("Reseting.. ");
+    for (int i = 0; i < 512; i++) {
+      EEPROM.write(i, 0);
+    }
     EEPROM.commit();
     server.send(200,"reset");
+  }
+  else{
+    server.send(401,"Incorrect Pasword");
+ 
   
 }
 void resetOptions(){
