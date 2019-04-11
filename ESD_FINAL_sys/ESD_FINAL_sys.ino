@@ -15,8 +15,8 @@ byte passswordLocation = 80;
 
 
 
-char* ssid = "Connect";
-char* password = "gyfu2KC#w%$u6+#v";
+char* ssid = "SSID";
+char* password = "PASSWORD";
 
 
 
