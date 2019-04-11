@@ -78,7 +78,27 @@
 </div>
 </body>
 <script>
-    $(document).ready(function () { 
+        $(document).ready(function() {
+        $('#initbttn').on('click',function () {  
+            var data = {
+                setupPassword : $('#setupPassword').val(),
+                currentPassword : $('#currentPassword').val(),
+            }
+            $.ajax({
+                type:'POST',
+                url:'http://192.168.1.5/intial',
+                data: JSON.stringify(data),
+                statusCode:{
+                    200:function () {
+                        console.log("Sucess");
+                    },
+                    400:function(){
+                        console.log("incorrect password");
+                    }
+                }
+            });
+        });
     });
+ 
 </script>
 </html>
