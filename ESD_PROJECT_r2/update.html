@@ -74,6 +74,25 @@
 </body>
 <script>
     $(document).ready(function () { 
+      $('#updatebttn').on('click',function () {  
+            var data = {
+              newPassword : $('#newPassword').val(),
+              currentPassword : $('#currentPassword_').val(),
+            }
+            $.ajax({
+                type:'POST',
+                url:'http://192.168.1.2/update_p',
+                data: JSON.stringify(data),
+                statusCode:{
+                    200:function () {
+                        console.log("Sucess");
+                    },
+                    400:function(){
+                        console.log("incorrect password");
+                    }
+                }
+            });
+      });
     });
 </script>
 </html>

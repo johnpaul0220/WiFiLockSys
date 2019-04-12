@@ -13,20 +13,15 @@ String defualtPassword = "wifilockpass123";
 String newPassword ;
 byte passswordLocation = 80;
 
-
-
-char* ssid = "SSID";
-char* password = "PASSWORD";
-
-
-
+char* ssid = "Connect";
+char* password = "gyfu2KC#w%$u6+#v";
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   Serial.println("IOT LOCK");
   EEPROM.begin(512);
-  EEPROM.write(0,0);
+  //EEPROM.write(0,0);
   EEPROM.commit();
   pinMode(D0,OUTPUT);
   pinMode(D1,OUTPUT);
@@ -52,11 +47,11 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   server.handleClient();
-
 }
 
 void inititalSetup(){
   server.sendHeader("Access-Control-Allow-Origin","*");
+  setupStatus = EEPROM.read(0);
   if(!setupStatus){
       Serial.println("Intial setup");
       String data =  server.arg("plain");
@@ -71,7 +66,7 @@ void inititalSetup(){
         writeString(80,newPassword_T);
         Serial.println(read_String(80));
         EEPROM.write(setupStatusPos,true);
-        setupStatus = true;
+        //setupStatus = true;
         EEPROM.commit();
         server.send(200,"OK");
 
@@ -136,17 +131,17 @@ void doorUnlock(){
 
 void update_(){
   server.sendHeader("Access-Control-Allow-Origin","*");
-  newPassword = read_String(80);
+  String  Password = read_String(80);
   String data =  server.arg("plain");
   StaticJsonBuffer<500> jsonbuffer ;
   JsonObject &jObject = jsonbuffer.parseObject(data);
   String password_T = jObject["currentPassword"];
   String newPassword_T = jObject["newPassword"];
 
-  if(newPassword == password_T){
+  if(Password == password_T){
     writeString(80,newPassword_T);
     EEPROM.commit();
-    server.send(204,"");
+    server.send(200,"");
   }
   else {
     server.send(401,"Unauthorised");
@@ -154,16 +149,19 @@ void update_(){
 }
 
 void update_Options(){
+  server.sendHeader("Access-Control-Allow-Origin","*");
   server.send(204,"");
 }
 
 void reset_(){
+  Serial.println("REST");
   server.sendHeader("Access-Control-Allow-Origin","*");
-  String pasword = readString(80);
+  String pasword = read_String(80);
+  Serial.println("password:" + pasword);
   StaticJsonBuffer <500> jsonbuffer;
-  JsonObject Jobject = jsonbuffer.parseObject(server.args("plain"));
-  String recivedPassword = Jobject["currentPassword "];
-  if(password == recivedPassword){
+  JsonObject &Jobject = jsonbuffer.parseObject(server.arg("plain"));
+  String recivedPassword = Jobject["currentPassword"];
+  if(pasword == recivedPassword){
     Serial.println("Reseting.. ");
     for (int i = 0; i < 512; i++) {
       EEPROM.write(i, 0);
@@ -173,8 +171,7 @@ void reset_(){
   }
   else{
     server.send(401,"Incorrect Pasword");
- 
-  
+  }
 }
 
 
