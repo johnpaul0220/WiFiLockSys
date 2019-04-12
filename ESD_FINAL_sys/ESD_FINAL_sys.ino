@@ -42,20 +42,11 @@ void setup() {
 
   Serial.println("ping ");
   
-  server.on("/intial",HTTP_OPTIONS,inititalSetupOptions);
   server.on("/intial",HTTP_POST,inititalSetup);
-   
-  server.on("/unlock",HTTP_OPTIONS,unlockOptions);
   server.on("/unlock",HTTP_POST,unlock);
-  
-  server.on("/update_p",HTTP_OPTIONS,update_Options);
   server.on("/update_p",HTTP_POST,update_);
-  
-  server.on("/reset",HTTP_OPTIONS,resetOptions);
   server.on("/reset",HTTP_POST,reset_);
-  
   server.begin();
-  
 }
 
 void loop() {
@@ -100,10 +91,6 @@ void inititalSetup(){
 
 
 }
-void inititalSetupOptions(){
-  server.sendHeader("Access-Control-Allow-Origin","*");
-  server.send(204,"");
-}
 
 void unlock(){
   
@@ -133,10 +120,6 @@ void unlock(){
     server.send(204,"");
   }
 }
-void unlockOptions(){
-  server.sendHeader("Access-Control-Allow-Origin","*");
-  server.send(204,"");
-}
 
 
 void doorUnlock(){
@@ -152,6 +135,7 @@ void doorUnlock(){
 }
 
 void update_(){
+  server.sendHeader("Access-Control-Allow-Origin","*");
   newPassword = read_String(80);
   String data =  server.arg("plain");
   StaticJsonBuffer<500> jsonbuffer ;
@@ -165,12 +149,11 @@ void update_(){
     server.send(204,"");
   }
   else {
-    return;
+    server.send(401,"Unauthorised");
   }
 }
 
 void update_Options(){
-  server.sendHeader("Access-Control-Allow-Origin","*");
   server.send(204,"");
 }
 
@@ -193,10 +176,7 @@ void reset_(){
  
   
 }
-void resetOptions(){
-  server.sendHeader("Access-Control-Allow-Origin","*");
-  server.send(204,"");
-}
+
 
 void writeString(char add,String data)
 {
