@@ -55,7 +55,12 @@
  </div>
 </body>
 <script>
-    $(document).ready(function () { 
-    });
+  var ip =  {};
+  ip=      $.getJSON("./config/ip.json",function(data){
+        ip=data.ip_address;
+        console.log(ip);
+        return ip;
+      });
+      console.log(ip);
 </script>
 </html>

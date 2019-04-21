@@ -72,15 +72,17 @@
 </div>
 </body>
 <script>
-    $(document).ready(function () { 
-        $('#unlockbttn').on('click',function () {  
-            var data = {
+    //try 2
+    $('#unlockbttn').on('click',function () {  
+        $.getJSON('./config/ip.json',function (config) {  
+            url = "http://"+config.ip_address+"/unlock";
+            data={
                 password : $('#KEY').val(),
             }
             $.ajax({
                 type:'POST',
-                url:'http://192.168.1.2/unlock',
-                data: JSON.stringify(data),
+                url: url,
+                data:JSON.stringify(data),
                 statusCode:{
                     200:function () {
                         console.log("Sucess");
@@ -89,8 +91,10 @@
                         console.log("incorrect password");
                     }
                 }
-            });
-        });
+            })
+        })
+        console.log("s");
+        //console.log(url)
     });
 </script>
 </html>
